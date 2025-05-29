@@ -1,7 +1,8 @@
-set(HEADER_LIST "${PROJECT_SOURCE_DIR}/include/libaptrepo/libaptrepo.hpp")
+set(HEADER_LIST "${PROJECT_SOURCE_DIR}/include/aptrepo/aptrepo.hpp")
 
-add_library(libaptrepo libaptrepo.cpp ${HEADER_LIST})
-target_include_directories(libaptrepo PUBLIC ../include)
+add_library(aptrepo aptrepo.cpp ${HEADER_LIST})
+target_include_directories(aptrepo PUBLIC ../include)
+target_link_libraries(aptrepo PRIVATE cpr::cpr spdlog::spdlog)
 
 # IDEs should put the headers in a nice place
 source_group(
