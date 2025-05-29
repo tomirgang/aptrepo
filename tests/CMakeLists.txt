@@ -7,7 +7,7 @@ FetchContent_MakeAvailable(catch)
 # Adds Catch2::Catch2
 
 # Tests need to be added as executables first
-add_executable(testlib testlib.cpp)
-target_link_libraries(testlib PRIVATE project_core Catch2::Catch2)
+add_executable(testlibaptrepo testlibaptrepo.cpp)
+target_link_libraries(testlibaptrepo PRIVATE libaptrepo Catch2::Catch2)
 
-add_test(NAME testlibtest COMMAND testlib)
+add_test(NAME libaptrepotest COMMAND testlibaptrepo)

@@ -1,0 +1,11 @@
+active: true
+derived: false
+header: |
+  InRelease File Information
+level: 1.0
+links: []
+normative: true
+ref: ''
+reviewed: b4ybeDrmazcyHyXRU-i9pJuq-9nVJeXEGaYos8Hf4bA=
+text: |
+  Libaptrepo **shall** provide the information from the InRelease file.

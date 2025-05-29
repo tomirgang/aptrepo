@@ -1,3 +1,3 @@
-add_executable(app app.cpp)
+add_executable(aptrepo aptrepo.cpp)
 
-target_link_libraries(app PRIVATE project_core)
+target_link_libraries(aptrepo PRIVATE libaptrepo)

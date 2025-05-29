@@ -1,12 +1,13 @@
-#include "project/version.hpp"
-#include "project/lib.hpp"
+#include "libaptrepo/version.hpp"
+#include "libaptrepo/libaptrepo.hpp"
 
 #include <iostream>
 #include <vector>
 #include <tuple>
 
-int main() {
-    std::cout << "Project Version: " << PROJECT_VERSION << std::endl;
+int main()
+{
+    std::cout << "AptRepo Version: " << PROJECT_VERSION << std::endl;
 
     std::vector<double> input = {1.2, 2.3, 3.4, 4.5};
 

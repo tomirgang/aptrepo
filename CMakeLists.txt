@@ -1,9 +1,9 @@
-cmake_minimum_required(VERSION 3.15...4.0)
+cmake_minimum_required(VERSION 4.0)
 
 project(
-    project
-    VERSION 1.0.0.0
-    DESCRIPTION "C++ CMake Template"
+    Libaptrepo
+    VERSION 0.1.0.0
+    DESCRIPTION "Libaptrepo is a C++ library for interfacing with Debian APT repositories."
     LANGUAGES CXX)
 
 
@@ -18,8 +18,8 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     # Find packages go here.
 
     configure_file (
-      "${PROJECT_SOURCE_DIR}/include/project/version.hpp.in"
-      "${PROJECT_BINARY_DIR}/include/project/version.hpp"
+      "${PROJECT_SOURCE_DIR}/include/libaptrepo/version.hpp.in"
+      "${PROJECT_BINARY_DIR}/include/libaptrepo/version.hpp"
     )
     include_directories(${CMAKE_CURRENT_BINARY_DIR}/include)
 
@@ -35,6 +35,7 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     # Docs only available if this is the main app
     find_package(Doxygen)
     if(Doxygen_FOUND)
+
         add_subdirectory(docs)
     else()
         message(STATUS "Doxygen not found, not building docs")

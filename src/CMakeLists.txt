@@ -1,7 +1,7 @@
-set(HEADER_LIST "${project_SOURCE_DIR}/include/project/lib.hpp")
+set(HEADER_LIST "${PROJECT_SOURCE_DIR}/include/libaptrepo/libaptrepo.hpp")
 
-add_library(project_core lib.cpp ${HEADER_LIST})
-target_include_directories(project_core PUBLIC ../include)
+add_library(libaptrepo libaptrepo.cpp ${HEADER_LIST})
+target_include_directories(libaptrepo PUBLIC ../include)
 
 # IDEs should put the headers in a nice place
 source_group(
