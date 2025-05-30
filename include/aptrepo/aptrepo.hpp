@@ -1,30 +1,26 @@
+/******************************************************************************
+ * @file aptrepo.hpp
+ * @brief Header file for aptrepo library functions.
+ *
+ * This file describes the public interface of the aptrepo library.
+ ******************************************************************************/
+
 #pragma once
 
 #include <string>
+#include <map>
+#include <cstddef>
+#include <memory>
+
+#include "aptrepo/release.hpp"
 
 namespace aptrepo
 {
-
-    namespace internal
-    {
-
-        /******************************************************************************
-         * Download the contents of a URL as std::string.
-         *
-         * This function is intended for internal use.
-         *
-         * @param url URL to download.
-         ******************************************************************************/
-        std::string download(std::string url);
-
-        /******************************************************************************
-         * Checks if the given URL was updated, using the provided etag.
-         *
-         * This function is intended for internal use.
-         *
-         * @param url URL to test and etag of current version.
-         ******************************************************************************/
-        bool needs_update(std::string url, std::string etag);
-
-    }
+    /******************************************************************************
+     * The parse_release function is used to parse a Release file from a given URL.
+     *
+     * @param url The URL of the Release file to be parsed.
+     * @return A Release object containing the parsed information.
+     ******************************************************************************/
+    Release parse_release(std::string url);
 }

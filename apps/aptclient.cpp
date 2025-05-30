@@ -34,10 +34,11 @@ int main(int argc, char *argv[])
     auto default_arch = "x86_64";
 #endif
 
-    options.add_options()("d,distro", "Distro name", cxxopts::value<std::string>()->default_value("none"));
+    options.add_options()("r,repo", "Repository base URL", cxxopts::value<std::string>()->default_value("https://archive.ubuntu.com/ubuntu"));
+    options.add_options()("d,distro", "Distro name", cxxopts::value<std::string>()->default_value("noble"));
     options.add_options()("a,arch", "CPU architecture", cxxopts::value<std::string>()->default_value(default_arch));
 
-    options.parse_positional({"script", "server", "filenames"});
+    options.parse_positional({"url"});
 
     auto result = options.parse(argc, argv);
 
@@ -59,17 +60,10 @@ int main(int argc, char *argv[])
 
     spdlog::info("AptRepo Version: {}", PROJECT_VERSION);
 
-    cpr::Response r = cpr::Get(cpr::Url{"https://archive.ubuntu.com/ubuntu/dists/noble/InRelease"});
-    spdlog::info("Response status code: {}", r.status_code);
-    if (r.status_code != 200)
-    {
-        spdlog::error("Failed to fetch InRelease file. Status code: {}", r.status_code);
-        return 1;
-    }
-    else
-    {
-        spdlog::info("Successfully fetched InRelease file:\n{}", r.text);
-    }
+    auto in_release_url = result["repo"].as<std::string>() + "/dists/" + result["distro"].as<std::string>() + "/InRelease";
+    auto release = aptrepo::parse_release(in_release_url);
+
+    spdlog::info("Parsed release: {}", static_cast<std::string>(release));
 
     return 0;
 }

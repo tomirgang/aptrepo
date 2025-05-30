@@ -1,6 +1,8 @@
 /.cache
 /**/build*
 
+/test*
+
 # Created by https://www.toptal.com/developers/gitignore/api/cmake,c++,visualstudiocode,vim,linux,windows,macos
 # Edit at https://www.toptal.com/developers/gitignore?templates=cmake,c++,visualstudiocode,vim,linux,windows,macos
 
