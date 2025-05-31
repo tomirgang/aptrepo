@@ -30,8 +30,7 @@ namespace aptrepo
          * @param path Path to the referenced file.
          * @param size_bytes Size of the referenced file in bytes.
          ******************************************************************************/
-        Reference(std::string base_url, std::string path, std::size_t size_bytes)
-            : m_base_url(base_url), m_path(path), m_size_bytes(size_bytes) {};
+        Reference(std::string base_url, std::string path, std::size_t size_bytes);
 
         /******************************************************************************
          * Add a hash for the referenced file.
@@ -48,7 +47,23 @@ namespace aptrepo
          ******************************************************************************/
         operator std::string() const;
 
+        /******************************************************************************
+         * Get the architectures of the Reference.
+         *
+         * @return Architecture as a string.
+         ******************************************************************************/
+        std::string get_architecture() const;
+
+        /******************************************************************************
+         * Get the component of the Reference.
+         *
+         * @return Component as a string.
+         ******************************************************************************/
+        std::string get_component() const;
+
     private:
+        std::string m_arch;
+        std::string m_comp;
         std::string m_base_url;
         std::string m_path;
         std::size_t m_size_bytes;

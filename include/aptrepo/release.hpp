@@ -148,7 +148,54 @@ namespace aptrepo
          ******************************************************************************/
         std::string get_base_url() const;
 
+        /******************************************************************************
+         * Check if the repository is a flat repository.
+         *
+         * @return True if flat, false otherwise.
+         ******************************************************************************/
+        bool is_flat() const;
+
+        /******************************************************************************
+         * Set the repository as a flat repository.
+         *
+         * @param flat True to set as flat, false otherwise.
+         ******************************************************************************/
+        void set_flat(bool flat);
+
+        /******************************************************************************
+         * Get all references in the Release.
+         *
+         * @return Vector of aptrepo::Reference objects.
+         ******************************************************************************/
+        std::vector<aptrepo::Reference> get_references() const;
+
+        /******************************************************************************
+         * Get references for a specific architecture and component.
+         *
+         * @param arch  The architecture to filter by.
+         * @param comp  The component to filter by.
+         * @return Vector of aptrepo::Reference objects matching the criteria.
+         ******************************************************************************/
+        std::vector<aptrepo::Reference> get_references(std::string arch, std::string comp) const;
+
+        /******************************************************************************
+         * Get references for a specific component.
+         *
+         * @param comp  The component to filter by.
+         * @return Vector of aptrepo::Reference objects for the specified component.
+         ******************************************************************************/
+        std::vector<aptrepo::Reference> get_references_for_comp(std::string comp) const;
+
+        /******************************************************************************
+         * Get references for a specific architecture.
+         *
+         * @param arch  The architecture to filter by.
+         * @return Vector of aptrepo::Reference objects for the specified architecture.
+         ******************************************************************************/
+        std::vector<aptrepo::Reference> get_references_for_arch(std::string arch) const;
+
     private:
+        bool m_flat;
         std::string m_url;
         std::string m_etag;
         std::string m_base_url;

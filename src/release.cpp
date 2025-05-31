@@ -12,6 +12,7 @@
 #include "aptrepo/release.hpp"
 
 aptrepo::Release::Release(aptrepo::internal::Download download)
+    : m_flat(false)
 {
     m_url = download.get_url();
     m_etag = download.get_etag();
@@ -292,4 +293,63 @@ std::string aptrepo::Release::get_etag() const
 std::string aptrepo::Release::get_base_url() const
 {
     return m_base_url;
+}
+
+bool aptrepo::Release::is_flat() const
+{
+    return m_flat;
+}
+
+void aptrepo::Release::set_flat(bool flat)
+{
+    m_flat = flat;
+}
+
+std::vector<aptrepo::Reference> aptrepo::Release::get_references() const
+{
+    std::vector<aptrepo::Reference> refs;
+    for (const auto &ref : m_references)
+    {
+        refs.push_back(*ref.second);
+    }
+    return refs;
+}
+
+std::vector<aptrepo::Reference> aptrepo::Release::get_references(std::string arch, std::string comp) const
+{
+    std::vector<aptrepo::Reference> refs;
+    for (const auto &ref : m_references)
+    {
+        if (ref.second->get_architecture() == arch && ref.second->get_component() == comp)
+        {
+            refs.push_back(*ref.second);
+        }
+    }
+    return refs;
+}
+
+std::vector<aptrepo::Reference> aptrepo::Release::get_references_for_comp(std::string comp) const
+{
+    std::vector<aptrepo::Reference> refs;
+    for (const auto &ref : m_references)
+    {
+        if (ref.second->get_component() == comp)
+        {
+            refs.push_back(*ref.second);
+        }
+    }
+    return refs;
+}
+
+std::vector<aptrepo::Reference> aptrepo::Release::get_references_for_arch(std::string arch) const
+{
+    std::vector<aptrepo::Reference> refs;
+    for (const auto &ref : m_references)
+    {
+        if (ref.second->get_architecture() == arch)
+        {
+            refs.push_back(*ref.second);
+        }
+    }
+    return refs;
 }
