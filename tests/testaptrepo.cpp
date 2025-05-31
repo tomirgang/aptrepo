@@ -79,15 +79,15 @@ TEST_CASE("Release", "[inrelease][data]")
         "-----BEGIN PGP SIGNED MESSAGE-----\n\
 Hash: SHA512\n\
 \n\
-Origin : Ubuntu\n\
-Label : Ubuntu\n\
-Suite : noble\n\
-Version : 24.04\n\
-Codename : noble\n\
-Date : Thu, 25 Apr 2024 15 : 10 : 33 UTC\n\
-Architectures : amd64 arm64 armhf i386 ppc64el riscv64 s390x\n\
-Components : main restricted universe multiverse\n\
-Description : Ubuntu Noble 24.04\n\
+Origin: Ubuntu\n\
+Label: Ubuntu\n\
+Suite: noble\n\
+Version: 24.04\n\
+Codename: noble\n\
+Date: Thu, 25 Apr 2024 15:10:33 UTC\n\
+Architectures: amd64 arm64 armhf i386 ppc64el riscv64 s390x\n\
+Components: main restricted universe multiverse\n\
+Description: Ubuntu Noble 24.04\n\
 MD5Sum:\n\
  1ae40621b32609d6251d09b2a47ef936        829119597 Contents-amd64\n\
  2fc7d01e0a1c7b351738abcd571eec59         51301092 Contents-amd64.gz\n\
@@ -116,11 +116,21 @@ yTy1ow//fX85IioBgUFZ720K233aS/WKYURW/orgOTDImg7bpz15WkfLltwJyxCj\n\
     auto release_str = std::string(release);
 
     CHECK_THAT(release_str, Catch::Matchers::Contains("Release<http://archive.ubuntu.com/ubuntu/dists/noble/InRelease>"));
-    CHECK_THAT(release_str, Catch::Matchers::Contains("Origin : Ubuntu"));
-    CHECK_THAT(release_str, Catch::Matchers::Contains("Suite : noble"));
-    CHECK_THAT(release_str, Catch::Matchers::Contains("Date : Thu, 25 Apr 2024 15 : 10 : 33 UTC"));
+    CHECK_THAT(release_str, Catch::Matchers::Contains("Origin: Ubuntu"));
+    CHECK_THAT(release_str, Catch::Matchers::Contains("Suite: noble"));
+    CHECK_THAT(release_str, Catch::Matchers::Contains("Date: Thu, 25 Apr 2024 15:10:33 UTC"));
     CHECK_THAT(release_str, Catch::Matchers::Contains("Acquire-By-Hash: yes"));
     CHECK_THAT(release_str, Catch::Matchers::Contains("Reference<http://archive.ubuntu.com/ubuntu/dists/noble/Contents-amd64 829119597 MD5Sum=1ae40621b32609d6251d09b2a47ef936, SHA1=daf36358068b71e8064ac4e1f9adb6ae765f72a6, SHA256=e945cdeadad8067c9b569e66c058f709d5aa4cd11d8099cc088dc192705e7bc7>"));
+
+    CHECK_THAT(release.get_origin(), Catch::Matchers::Equals("Ubuntu"));
+    CHECK_THAT(release.get_label(), Catch::Matchers::Equals("Ubuntu"));
+    CHECK_THAT(release.get_suite(), Catch::Matchers::Equals("noble"));
+    CHECK_THAT(release.get_version(), Catch::Matchers::Equals("24.04"));
+    CHECK_THAT(release.get_codename(), Catch::Matchers::Equals("noble"));
+    REQUIRE(release.get_date().time_since_epoch() == std::chrono::seconds(1714057833));
+    CHECK_THAT(release.get_architectures(), Catch::Matchers::UnorderedEquals(std::vector<std::string>{"amd64", "arm64", "armhf", "i386", "ppc64el", "riscv64", "s390x"}));
+    CHECK_THAT(release.get_components(), Catch::Matchers::UnorderedEquals(std::vector<std::string>{"main", "restricted", "universe", "multiverse"}));
+    CHECK_THAT(release.get_description(), Catch::Matchers::Equals("Ubuntu Noble 24.04"));
 }
 
 TEST_CASE("parse_release", "[inrelease][api]")

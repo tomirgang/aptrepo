@@ -3,6 +3,7 @@
 #include <cctype>
 #include <regex>
 #include <format>
+#include <iomanip>
 
 #include "aptrepo/reference.hpp"
 #include "aptrepo/internal/utils.hpp"
@@ -71,6 +72,78 @@ aptrepo::Release::Release(aptrepo::internal::Download download)
             }
         }
     }
+
+    {
+        auto it = m_fields.find("Architectures");
+        if (it != m_fields.end())
+        {
+            std::string archs = it->second;
+            std::stringstream ss(archs);
+            std::string arch;
+            while (std::getline(ss, arch, ' '))
+            {
+                if (!arch.empty())
+                {
+                    m_architectures.push_back(arch);
+                }
+            }
+        }
+        else
+        {
+            spdlog::warn("Release: Architectures field not found in release file.");
+        }
+    }
+
+    {
+        auto it = m_fields.find("Components");
+        if (it != m_fields.end())
+        {
+            std::string comps = it->second;
+            std::stringstream ss(comps);
+            std::string comp;
+            while (std::getline(ss, comp, ' '))
+            {
+                if (!comp.empty())
+                {
+                    m_components.push_back(comp);
+                }
+            }
+        }
+        else
+        {
+            spdlog::warn("Release: Components field not found in release file.");
+        }
+    }
+
+    {
+        auto it = m_fields.find("Date");
+        if (it != m_fields.end())
+        {
+            tm tm = {};
+            auto stream = std::istringstream(it->second);
+            stream >> std::get_time(&tm, "%a, %d %b %Y %H:%M:%S");
+            if (stream.fail())
+            {
+                spdlog::error("Release: Failed to parse date: {}", it->second);
+            }
+            else
+            {
+                auto time = std::mktime(&tm) - timezone;
+                if (time == -1)
+                {
+                    spdlog::error("Release: Failed to parse date: {}", it->second);
+                }
+                else
+                {
+                    m_date = std::chrono::time_point<std::chrono::utc_clock, std::chrono::seconds>(std::chrono::seconds(time));
+                }
+            }
+        }
+        else
+        {
+            spdlog::warn("Release: Date field not found in release file.");
+        }
+    }
 }
 
 aptrepo::Release::operator std::string() const
@@ -94,7 +167,6 @@ aptrepo::Release::operator std::string() const
 
 void aptrepo::Release::add_field(std::string key, std::string value)
 {
-    spdlog::debug("Adding field to Release: key: {}, value: {}", key, value);
     m_fields[key] = value;
 }
 
@@ -102,14 +174,122 @@ void aptrepo::Release::add_reference(std::string path, std::size_t size, std::st
 {
     if (auto search = m_references.find(path); search != m_references.end())
     {
-        spdlog::debug("Adding hash to existing reference: path: {}, algorithm: {}, hash: {}", path, algorithm, hash);
         m_references[path]->add_hash(algorithm, hash);
     }
     else
     {
-        spdlog::debug("Creating new reference: path: {}, size: {}, algorithm: {}, hash: {}", path, size, algorithm, hash);
         auto ref = std::shared_ptr<aptrepo::Reference>{new aptrepo::Reference(m_base_url, path, size)};
         ref->add_hash(algorithm, hash);
         m_references[path] = ref;
     }
+}
+
+std::string aptrepo::Release::get_origin() const
+{
+    auto it = m_fields.find("Origin");
+    if (it != m_fields.end())
+    {
+        return it->second;
+    }
+    else
+    {
+        spdlog::warn("Release: Origin field not found in release file.");
+    }
+    return {};
+}
+
+std::string aptrepo::Release::get_label() const
+{
+    auto it = m_fields.find("Label");
+    if (it != m_fields.end())
+    {
+        return it->second;
+    }
+    return {};
+}
+
+std::string aptrepo::Release::get_suite() const
+{
+    auto it = m_fields.find("Suite");
+    if (it != m_fields.end())
+    {
+        return it->second;
+    }
+    else
+    {
+        spdlog::warn("Release: Suite field not found in release file.");
+    }
+    return {};
+}
+
+std::string aptrepo::Release::get_version() const
+{
+    auto it = m_fields.find("Version");
+    if (it != m_fields.end())
+    {
+        return it->second;
+    }
+    else
+    {
+        spdlog::warn("Release: Version field not found in release file.");
+    }
+    return {};
+}
+
+std::string aptrepo::Release::get_codename() const
+{
+    auto it = m_fields.find("Codename");
+    if (it != m_fields.end())
+    {
+        return it->second;
+    }
+    else
+    {
+        spdlog::warn("Release: Codename field not found in release file.");
+    }
+    return {};
+}
+
+std::chrono::time_point<std::chrono::utc_clock, std::chrono::seconds> aptrepo::Release::get_date() const
+{
+    return m_date;
+}
+
+std::vector<std::string> aptrepo::Release::get_architectures() const
+{
+    return m_architectures;
+}
+
+std::vector<std::string> aptrepo::Release::get_components() const
+{
+    return m_components;
+}
+
+std::string aptrepo::Release::get_description() const
+{
+    auto it = m_fields.find("Description");
+    if (it != m_fields.end())
+    {
+        return it->second;
+    }
+    else
+    {
+        spdlog::warn("Release: Description field not found in release file.");
+    }
+    return {};
+}
+
+std::string aptrepo::Release::get_url() const
+{
+    return m_url;
+}
+
+std::string aptrepo::Release::get_etag() const
+{
+    return m_etag;
+}
+
+std::string aptrepo::Release::get_base_url() const
+{
+    return m_base_url;
 }

@@ -14,6 +14,8 @@
 #include <map>
 #include <cstddef>
 #include <memory>
+#include <chrono>
+#include <vector>
 
 #include "aptrepo/reference.hpp"
 #include "aptrepo/internal/downloads.hpp"
@@ -62,10 +64,97 @@ namespace aptrepo
          ******************************************************************************/
         operator std::string() const;
 
+        /******************************************************************************
+         * Get the origin of the Release.
+         *
+         * @return Origin as a string.
+         ******************************************************************************/
+        std::string get_origin() const;
+
+        /******************************************************************************
+         * Get the label of the Release.
+         *
+         * @return Label as a string.
+         ******************************************************************************/
+        std::string get_label() const;
+
+        /******************************************************************************
+         * Get the suite of the Release.
+         *
+         * @return Suite as a string.
+         ******************************************************************************/
+        std::string get_suite() const;
+
+        /******************************************************************************
+         * Get the version of the Release.
+         *
+         * @return Version as a string.
+         ******************************************************************************/
+        std::string get_version() const;
+
+        /******************************************************************************
+         * Get the codename of the Release.
+         *
+         * @return Codename as a string.
+         ******************************************************************************/
+        std::string get_codename() const;
+
+        /******************************************************************************
+         * Get the date of the Release.
+         *
+         * @return Date as a time_point in UTC seconds.
+         ******************************************************************************/
+        std::chrono::time_point<std::chrono::utc_clock, std::chrono::seconds> get_date() const;
+
+        /******************************************************************************
+         * Get the architectures supported by the Release.
+         *
+         * * @return Vector of architecture strings.
+         ******************************************************************************/
+        std::vector<std::string> get_architectures() const;
+
+        /******************************************************************************
+         * Get the components of the Release.
+         *
+         * @return Vector of component strings.
+         ******************************************************************************/
+        std::vector<std::string> get_components() const;
+
+        /******************************************************************************
+         * Get the description of the Release.
+         *
+         * @return Description as a string.
+         ******************************************************************************/
+        std::string get_description() const;
+
+        /******************************************************************************
+         * Get the URL of the InRelease file.
+         *
+         * @return URL as a string.
+         ******************************************************************************/
+        std::string get_url() const;
+
+        /******************************************************************************
+         * Get the ETag of the Release.
+         *
+         * @return ETag as a string.
+         ******************************************************************************/
+        std::string get_etag() const;
+
+        /******************************************************************************
+         * Get the base URL of the Release.
+         *
+         * @return Base URL as a string.
+         ******************************************************************************/
+        std::string get_base_url() const;
+
     private:
         std::string m_url;
         std::string m_etag;
         std::string m_base_url;
+        std::chrono::time_point<std::chrono::utc_clock, std::chrono::seconds> m_date;
+        std::vector<std::string> m_architectures;
+        std::vector<std::string> m_components;
         std::map<std::string, std::string> m_fields;
         std::map<std::string, std::shared_ptr<aptrepo::Reference>> m_references;
     };
